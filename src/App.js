@@ -9,48 +9,106 @@ import {
 
 import QrReader from 'react-qr-reader'
 import QRCode from 'qrcode.react'
+import styled from 'styled-components'
+
+const Container = styled.div`
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
+    width: 400px;
+    text-align: center;
+    /* border: 1px solid black; */
+    border-radius: 10px;
+    background: #00c6ff;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #0072ff, #00c6ff);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #0072ff, #00c6ff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: #fff;
+`
+
+const Navbar = styled.div`
+  display: flex;
+  justify-content: center;
+`
+const Li = styled.li`
+  margin: 20px;
+  list-style: none;
+  color: #fff;
+`
+const Navigation = styled.div`
+  
+`
+
+const Inputs = styled.div`
+  display: flex;
+  flex-direction: column;
+  /* justify-content:center; */
+  align-items: center;
+  margin: 10px;
+`
+const Input = styled.input`
+  margin: 10px;
+  width : 50%;
+  background: transparent;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  height: 25px;
+  color: #fff;
+  padding: 10px;
+`
+
+const Hr = styled.hr`
+  margin: 25px;
+`
+const Borderdiv = styled.div`
+  border-radius: 25px;
+`
+
+
 
 const App = () => (
-  <Router>
-    <div>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/generate-qrcode">Generate</Link>
-        </li>
-        <li>
-          <Link to="/scan-qrcode">Scan</Link>
-        </li>
-      </ul>
+  <Container>
 
-      <hr />
+    <Router>
+      <Navigation>
 
-      <Route exact path="/" component={Home} />
-      <Route
-        path="/generate-qrcode"
-        component={GenerateQRCode}
-      />
-      <Route path="/scan-qrcode" component={ScanQRCode} />
-    </div>
-  </Router>
+        <Navbar>
+          <Li>
+            <Link to="/">Home</Link>
+          </Li>
+          <Li>
+            <Link to="/generate-qrcode">Generate</Link>
+          </Li>
+          <Li>
+            <Link to="/scan-qrcode">Scan</Link>
+          </Li>
+        </Navbar>
+
+        <Hr />
+
+        <Route exact path="/" component={Home} />
+        <Route
+          path="/generate-qrcode"
+          component={GenerateQRCode}
+        />
+        <Route path="/scan-qrcode" component={ScanQRCode} />
+      </Navigation>
+    </Router>
+  </Container>
 )
 
 const Home = () => (
   <div>
     <h1>We are awesome!</h1>
-    <ul>
-      <li>
+    <Navbar>
+      <Li>
         <Link to="/">Home</Link>
-      </li>
-      <li>
+      </Li>
+      <Li>
         <Link to="/generate-qrcode">Generate</Link>
-      </li>
-      <li>
+      </Li>
+      <Li>
         <Link to="/scan-qrcode">Scan</Link>
-      </li>
-    </ul>
+      </Li>
+    </Navbar>
   </div>
 )
 
@@ -64,9 +122,9 @@ class GenerateQRCode extends Component {
 
     console.log(
       `{"student_name": "${
-        this.state.student_name
+      this.state.student_name
       }", "student_id":"${
-        this.state.student_id
+      this.state.student_id
       }", "student_class":"${this.state.student_class}"}`
     )
   }
@@ -75,25 +133,27 @@ class GenerateQRCode extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <input
-            onChange={this.handleChange('student_name')}
-            type="text"
-          />
-          <input
-            onChange={this.handleChange('student_id')}
-            type="text"
-          />
-          <input
-            onChange={this.handleChange('student_class')}
-            type="text"
-          />
+          <Inputs>
+            <Input
+              onChange={this.handleChange('student_name')}
+              type="text"
+            />
+            <Input
+              onChange={this.handleChange('student_id')}
+              type="text"
+            />
+            <Input
+              onChange={this.handleChange('student_class')}
+              type="text"
+            />
+          </Inputs>
           <QRCode
             value={`{"student_name": "${
               this.state.student_name
-            }", "student_id":"${
+              }", "student_id":"${
               this.state.student_id
-            }", "student_class":"${this.state.student_class}"}`}
-            size={512}
+              }", "student_class":"${this.state.student_class}"}`}
+            size={400}
             bgColor={'#ffffff'}
             fgColor={'#000000'}
             level={'L'}
@@ -133,7 +193,7 @@ class QRCamera extends Component {
         student: this.turnQRCodeIntoJSON(data)
       })
       console.log(this.state);
-      
+
     }
   }
 
@@ -151,13 +211,15 @@ class QRCamera extends Component {
   render() {
     return (
       <div>
-        <QrReader
-          delay={this.state.delay}
-          onError={this.handleError}
-          onScan={this.handleScan}
-          style={{ width: 500 }}
-        />
-        <hr/>
+        <Borderdiv>
+          <QrReader
+            delay={this.state.delay}
+            onError={this.handleError}
+            onScan={this.handleScan}
+            style={{ width: 400 }}
+          />
+        </Borderdiv>
+        <Hr />
         {this.state.student && <div>
           <h1>{this.state.student.student_name}</h1>
           <h2>{this.state.student.student_class}</h2>
