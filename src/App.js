@@ -1,31 +1,115 @@
 import React, { Component } from 'react'
 import './App.css'
 
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom'
+
 import QrReader from 'react-qr-reader'
 import QRCode from 'qrcode.react'
 
-class App extends Component {
-  state = {qrcode: ""}
+const App = () => (
+  <Router>
+    <div>
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/generate-qrcode">Generate</Link>
+        </li>
+        <li>
+          <Link to="/scan-qrcode">Scan</Link>
+        </li>
+      </ul>
 
-  handleChange = () => {
-    this.setState({qrcode: this.refs.qrcode.value})
-    console.log(this.state);
-    
+      <hr />
+
+      <Route exact path="/" component={Home} />
+      <Route
+        path="/generate-qrcode"
+        component={GenerateQRCode}
+      />
+      <Route path="/scan-qrcode" component={ScanQRCode} />
+    </div>
+  </Router>
+)
+
+const Home = () => (
+  <div>
+    <h1>We are awesome!</h1>
+    <ul>
+      <li>
+        <Link to="/">Home</Link>
+      </li>
+      <li>
+        <Link to="/generate-qrcode">Generate</Link>
+      </li>
+      <li>
+        <Link to="/scan-qrcode">Scan</Link>
+      </li>
+    </ul>
+  </div>
+)
+
+class GenerateQRCode extends Component {
+  state = { qrcode: '' }
+
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value
+    })
+
+    console.log(
+      `{"student_name": "${
+        this.state.student_name
+      }", "student_id":"${
+        this.state.student_id
+      }", "student_class":"${this.state.student_class}"}`
+    )
   }
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <input onChange={this.handleChange} type="text" ref="qrcode"/>
-          <QRCode
-          value={this.state.qrcode}
-            size={256}
-            bgColor={"#ffffff"}
-            fgColor={"#000000"}
-            level={"L"}
-            style={{padding: 50}}
+          <input
+            onChange={this.handleChange('student_name')}
+            type="text"
           />
+          <input
+            onChange={this.handleChange('student_id')}
+            type="text"
+          />
+          <input
+            onChange={this.handleChange('student_class')}
+            type="text"
+          />
+          <QRCode
+            value={`{student_name:${
+              this.state.student_name
+            }, student_id:${
+              this.state.student_id
+            }, student_class:${this.state.student_class}}`}
+            size={256}
+            bgColor={'#ffffff'}
+            fgColor={'#000000'}
+            level={'L'}
+            style={{ padding: 50 }}
+          />
+        </header>
+      </div>
+    )
+  }
+}
+
+class ScanQRCode extends Component {
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
           <QRCamera />
         </header>
       </div>
