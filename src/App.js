@@ -10,6 +10,8 @@ import {
 import QrReader from 'react-qr-reader'
 import QRCode from 'qrcode.react'
 import styled from 'styled-components'
+import List from './List'
+
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -61,8 +63,6 @@ const Hr = styled.hr`
 const Borderdiv = styled.div`
   border-radius: 25px;
 `
-
-
 
 const App = () => (
   <Container>
@@ -152,7 +152,9 @@ class GenerateQRCode extends Component {
               this.state.student_name
               }", "student_id":"${
               this.state.student_id
-              }", "student_class":"${this.state.student_class}"}`}
+            }", "student_class":"${
+              this.state.student_class
+            }"}`}
             size={400}
             bgColor={'#ffffff'}
             fgColor={'#000000'}
@@ -197,7 +199,7 @@ class QRCamera extends Component {
     }
   }
 
-  turnQRCodeIntoJSON = (data) => {
+  turnQRCodeIntoJSON = data => {
     try {
       return JSON.parse(data)
     } catch (error) {
@@ -208,6 +210,41 @@ class QRCamera extends Component {
   handleError(err) {
     console.error(err)
   }
+
+  sendDataToServer = (event) => {
+    if (event) {event.preventDefault()} // Prevent the page from reloading
+    console.log(this.state);
+
+    fetch("http://localhost:3030/add-attendance", {
+      method: 'POST', // or 'PUT'
+      body: JSON.stringify(this.state.student), // data can be `string` or {object}!
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json())
+    .then(response => console.log('Success:', JSON.stringify(response)))
+    .catch(error => console.error('Error:', error));
+  }
+
+  studentArrived = () => {
+    this.setState({student: {...this.state.student, arrived: Date.now()}})
+    console.log(this.state);
+    this.sendDataToServer()
+  }
+
+  studentLeft = () => {
+    this.setState({student: {...this.state.student, left: Date.now()}})
+    console.log(this.state);
+    this.sendDataToServer()
+
+  }
+
+  addCommentToState = () => {
+    this.setState({student: {...this.state.student, comment: this.refs.comment.value}})
+    console.log(this.state);
+    
+  }
+
   render() {
     return (
       <div>
