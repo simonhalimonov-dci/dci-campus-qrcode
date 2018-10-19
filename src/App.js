@@ -88,12 +88,12 @@ class GenerateQRCode extends Component {
             type="text"
           />
           <QRCode
-            value={`{student_name:${
+            value={`{"student_name": "${
               this.state.student_name
-            }, student_id:${
+            }", "student_id":"${
               this.state.student_id
-            }, student_class:${this.state.student_class}}`}
-            size={256}
+            }", "student_class":"${this.state.student_class}"}`}
+            size={512}
             bgColor={'#ffffff'}
             fgColor={'#000000'}
             level={'L'}
@@ -129,10 +129,22 @@ class QRCamera extends Component {
   handleScan(data) {
     if (data) {
       this.setState({
-        result: data
+        result: data,
+        student: this.turnQRCodeIntoJSON(data)
       })
+      console.log(this.state);
+      
     }
   }
+
+  turnQRCodeIntoJSON = (data) => {
+    try {
+      return JSON.parse(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   handleError(err) {
     console.error(err)
   }
@@ -145,6 +157,13 @@ class QRCamera extends Component {
           onScan={this.handleScan}
           style={{ width: 500 }}
         />
+        <hr/>
+        {this.state.student && <div>
+          <h1>{this.state.student.student_name}</h1>
+          <h2>{this.state.student.student_class}</h2>
+
+        </div>}
+
         <p>{this.state.result}</p>
       </div>
     )
