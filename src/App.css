@@ -39,3 +39,57 @@
   margin: 16px;
 
 }
+
+
+.attendance-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+}
+
+.attendance-list {
+  display: table;
+  margin: 0;
+  padding: 0;
+  width: calc(100% - 16px);
+  font-size: 14px;
+  list-style: none;
+}
+
+.attendance-item {
+  display: table-row;
+}
+
+.attendance-item > * {
+  display: table-cell;
+  padding: 16px 8px;
+  /* height: 16px; */
+}
+
+.attendance-item > .attended {
+  text-align: center;
+  padding: 0 16px;
+}
+
+.attendance-item > .name {
+  font-size: 20px;
+  font-weight: bold;
+  max-width: 300px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.attendance-item > .times {
+  font-size: 16px;
+  color: #999;
+  text-align: right;
+}
+
+.attendance-item > .date {
+  font-weight: bold;
+}
+
+.attendance-item > :not(.attended) {
+  border-bottom: 1px solid #CCC;
+}

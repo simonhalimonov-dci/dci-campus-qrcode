@@ -1,42 +1,78 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
+
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faCircle);
+
+window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 
 class List extends Component {
-  state= {
-    attendance: []
-  }
+  state = {
+    attendance: [],
+    classId: "FBW2",
+  };
 
-  componentWillMount() {
+  componentDidMount() {
     fetch("http://localhost:3030/attendance")
-    .then(res => res.json())
-    .then(json => {
-      this.setState({attendance: json})
-      console.log(json);
-      console.log(this.state);
-      
-    })
+      .then(res => res.json())
+      .then(json => {
+        this.setState({ attendance: json });
+      });
   }
 
-  render () {
+  render() {
     return (
       <div>
-        <h1>List</h1>
+        <header className="attendance-header">
+          <h1>{new Date(Date.now()).toLocaleDateString()}</h1>
+          <h1>
+            <Select
+              value={this.state.classId}
+              onChange={event => {
+                this.setState({ classId: event.target.value });
+              }}
+            >
+              <MenuItem value="FBW2">FBW2</MenuItem>
+              <MenuItem value="FBW3">FBW3</MenuItem>
+            </Select>
+          </h1>
+        </header>
 
-        <ul>
-          {this.state.attendance && this.state.attendance.map(item => {
-            return (
-              <li style={{display: "flex", justifyContent: "space-between"}}>
-                <h3 style={{width: 100}} >{ item.student_name} {item.student_id}</h3>
-                <p>{item.student_class}</p>
-                <p>{Date.now()}</p>
-                <p>Not attended</p>
-              </li>
-            )
-          })}
+        <ul className="attendance-list">
+          {this.state.attendance &&
+            this.state.attendance
+              .filter(item => item.student_name)
+              .filter(item => item.student_class === this.state.classId)
+              .map(item => {
+                return (
+                  <li className="attendance-item" key={item._id}>
+                    <div className="attended">
+                      <FontAwesomeIcon
+                        icon="circle"
+                        color={item.date_arrived ? "green" : "#CCC"}
+                      />
+                    </div>
+                    <p className="name">{item.student_name}</p>
+                    <p className="times">
+                      {/* {item.date_arrived &&
+                        new Date(item.date_arrived).toLocaleDateString()} */}
+                      9:30 - 16:45
+                      {/* {item.date_left &&
+                        new Date(item.date_left).toLocaleDateString()} */}
+                    </p>
+                    {/* <p>{item.}</p> */}
+                  </li>
+                );
+              })}
         </ul>
       </div>
-    )
+    );
   }
 }
 
-
-export default List
+export default List;
