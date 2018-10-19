@@ -34,6 +34,12 @@ const Li = styled.li`
   margin: 20px;
   list-style: none;
   color: #fff;
+
+  a {
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
 `
 const Navigation = styled.div`
   
@@ -75,6 +81,9 @@ const App = () => (
             <Link to="/">Home</Link>
           </Li>
           <Li>
+            <Link to="/list">List</Link>
+          </Li>
+          <Li>
             <Link to="/generate-qrcode">Generate</Link>
           </Li>
           <Li>
@@ -88,6 +97,10 @@ const App = () => (
         <Route
           path="/generate-qrcode"
           component={GenerateQRCode}
+        />
+        <Route
+          path="/list"
+          component={List}
         />
         <Route path="/scan-qrcode" component={ScanQRCode} />
       </Navigation>
