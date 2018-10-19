@@ -39,6 +39,7 @@ class List extends Component {
             >
               <MenuItem value="FBW2">FBW2</MenuItem>
               <MenuItem value="FBW3">FBW3</MenuItem>
+              <MenuItem value="FBW6">FBW6</MenuItem>
             </Select>
           </h1>
         </header>
