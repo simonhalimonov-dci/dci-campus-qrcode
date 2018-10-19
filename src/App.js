@@ -46,7 +46,7 @@ const Input = styled.input`
   border: 1px solid #ddd;
   border-radius: 5px;
   height: 25px;
-  color: #fff;
+  color: #000;
   padding: 10px;
 `;
 
@@ -124,9 +124,9 @@ class GenerateQRCode extends Component {
       <div className="App">
         <header className="App-header">
           <Inputs>
-            <Input onChange={this.handleChange("student_name")} type="text" />
-            <Input onChange={this.handleChange("student_id")} type="text" />
-            <Input onChange={this.handleChange("student_class")} type="text" />
+            <Input placeholder="Name" onChange={this.handleChange("student_name")} type="text" />
+            <Input placeholder="Student ID" onChange={this.handleChange("student_id")} type="text" />
+            <Input placeholder="Class" onChange={this.handleChange("student_class")} type="text" />
           </Inputs>
           <QRCode
             value={`{"student_name": "${
@@ -169,12 +169,16 @@ class QRCamera extends Component {
   }
   handleScan(data) {
     if (data) {
+      if (data !== this.state.result) {
+        this.refs.sound.play()
+      }
       this.setState({
         result: data,
         student: this.turnQRCodeIntoJSON(data),
       });
       console.log(this.state);
     }
+
   }
 
   turnQRCodeIntoJSON = data => {
@@ -242,10 +246,16 @@ class QRCamera extends Component {
           <div>
             <h1>{this.state.student.student_name}</h1>
             <h2>{this.state.student.student_class}</h2>
+            <button onClick={this.studentArrived}>Arrived</button>
+            <button onClick={this.studentLeft}>Left</button>
           </div>
+
         )}
 
         <p>{this.state.result}</p>
+
+        <audio ref="sound" src="./18788.mp3"/>
+
       </div>
     );
   }

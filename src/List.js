@@ -55,7 +55,7 @@ class List extends Component {
                     <div className="attended">
                       <FontAwesomeIcon
                         icon="circle"
-                        color={item.date_arrived ? "green" : "#CCC"}
+                        color={/*item.date_arrived*/ true ? "green" : "#CCC"}
                       />
                     </div>
                     <p className="name">{item.student_name}</p>
