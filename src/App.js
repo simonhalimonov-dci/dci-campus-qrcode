@@ -10,12 +10,17 @@ import {
 import QrReader from 'react-qr-reader'
 import QRCode from 'qrcode.react'
 
+import List from './List'
+
 const App = () => (
   <Router>
     <div>
       <ul>
         <li>
           <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/list">List</Link>
         </li>
         <li>
           <Link to="/generate-qrcode">Generate</Link>
@@ -33,6 +38,7 @@ const App = () => (
         component={GenerateQRCode}
       />
       <Route path="/scan-qrcode" component={ScanQRCode} />
+      <Route path="/list" component={List} />
     </div>
   </Router>
 )
@@ -151,19 +157,30 @@ class QRCamera extends Component {
   }
 
   sendDataToServer = (event) => {
-    event.preventDefault() // Prevent the page from reloading
+    if (event) {event.preventDefault()} // Prevent the page from reloading
     console.log(this.state);
+
+    fetch("http://localhost:3030/add-attendance", {
+      method: 'POST', // or 'PUT'
+      body: JSON.stringify(this.state.student), // data can be `string` or {object}!
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json())
+    .then(response => console.log('Success:', JSON.stringify(response)))
+    .catch(error => console.error('Error:', error));
   }
 
   studentArrived = () => {
     this.setState({student: {...this.state.student, arrived: Date.now()}})
     console.log(this.state);
-    
+    this.sendDataToServer()
   }
 
   studentLeft = () => {
     this.setState({student: {...this.state.student, left: Date.now()}})
     console.log(this.state);
+    this.sendDataToServer()
 
   }
 
