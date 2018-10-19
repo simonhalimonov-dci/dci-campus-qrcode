@@ -92,7 +92,9 @@ class GenerateQRCode extends Component {
               this.state.student_name
             }", "student_id":"${
               this.state.student_id
-            }", "student_class":"${this.state.student_class}"}`}
+            }", "student_class":"${
+              this.state.student_class
+            }"}`}
             size={512}
             bgColor={'#ffffff'}
             fgColor={'#000000'}
@@ -132,12 +134,11 @@ class QRCamera extends Component {
         result: data,
         student: this.turnQRCodeIntoJSON(data)
       })
-      console.log(this.state);
-      
+      console.log(this.state)
     }
   }
 
-  turnQRCodeIntoJSON = (data) => {
+  turnQRCodeIntoJSON = data => {
     try {
       return JSON.parse(data)
     } catch (error) {
@@ -148,6 +149,30 @@ class QRCamera extends Component {
   handleError(err) {
     console.error(err)
   }
+
+  sendDataToServer = (event) => {
+    event.preventDefault() // Prevent the page from reloading
+    console.log(this.state);
+  }
+
+  studentArrived = () => {
+    this.setState({student: {...this.state.student, arrived: Date.now()}})
+    console.log(this.state);
+    
+  }
+
+  studentLeft = () => {
+    this.setState({student: {...this.state.student, left: Date.now()}})
+    console.log(this.state);
+
+  }
+
+  addCommentToState = () => {
+    this.setState({student: {...this.state.student, comment: this.refs.comment.value}})
+    console.log(this.state);
+    
+  }
+
   render() {
     return (
       <div>
@@ -157,12 +182,24 @@ class QRCamera extends Component {
           onScan={this.handleScan}
           style={{ width: 500 }}
         />
-        <hr/>
-        {this.state.student && <div>
-          <h1>{this.state.student.student_name}</h1>
-          <h2>{this.state.student.student_class}</h2>
+        <hr />
+        {this.state.student && (
+          <div>
+            <h1>{this.state.student.student_name}</h1>
+            <h2>{this.state.student.student_class}</h2>
 
-        </div>}
+            <form onSubmit={this.sendDataToServer} action="">
+              <div>
+                <button onClick={this.studentArrived} className="btn">Arrived</button>
+                <button onClick={this.studentLeft} className="btn">Left</button>
+              </div>
+
+              <textarea onChange={this.addCommentToState} ref="comment" name="" id="" cols="30" rows="10" />
+            </form>
+          </div>
+        )}
+
+        <hr />
 
         <p>{this.state.result}</p>
       </div>

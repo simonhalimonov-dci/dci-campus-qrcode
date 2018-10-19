@@ -28,3 +28,14 @@
     transform: rotate(360deg);
   }
 }
+
+
+.btn {
+  font-size: 24px;
+  padding: 8px;
+  background: green;
+  color: white;
+  border: none;
+  margin: 16px;
+
+}
